@@ -7,6 +7,7 @@
 package win
 
 import (
+	"fmt"
 	"log"
 	"syscall"
 	"unsafe"
@@ -3377,11 +3378,14 @@ func SendInput(nInputs uint32, pInputs unsafe.Pointer, cbSize int32) uint32 {
 
 func SendMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	if UseAssert {
+		var s string
 		if msgString, found := WM_STRING[int(msg)]; found {
-			log.Println("sendmsg", hWnd, msgString, wParam, lParam)
+			s = fmt.Sprintf("sendmsg %d %s %d %d", hWnd, msgString, wParam, lParam)
 		} else {
-			log.Println("sendmsg", hWnd, "WM_USER +", msg-WM_USER, wParam, lParam)
+			s = fmt.Sprintf("sendmsg %d %s %d %d", hWnd, "WM_USER +", msg-WM_USER, wParam, lParam)
 		}
+		log.Println(s, "->")
+		defer log.Println(s, "<-")
 	}
 	ret, _, _ := syscall.Syscall6(sendMessage.Addr(), 4,
 		uintptr(hWnd),
