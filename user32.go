@@ -3382,7 +3382,7 @@ func SendMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		if msgString, found := WM_STRING[int(msg)]; found {
 			s = fmt.Sprintf("sendmsg %d %s %d %d", hWnd, msgString, wParam, lParam)
 		} else {
-			s = fmt.Sprintf("sendmsg %d %s %d %d", hWnd, "WM_USER +", msg-WM_USER, wParam, lParam)
+			s = fmt.Sprintf("sendmsg %d %s %d %d %d", hWnd, "WM_USER +", msg-WM_USER, wParam, lParam)
 		}
 		log.Println(s, "->")
 		defer log.Println(s, "<-")
