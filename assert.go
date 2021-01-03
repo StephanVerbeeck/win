@@ -24,3 +24,8 @@ func CheckMessageThread() {
 		Assert("win.CheckMessageThread", threadID == checkMessageThreadID)
 	}
 }
+
+// IsMessageThread return true when called by the thread that has runs the windows OS main-message-loop
+func IsMessageThread() bool {
+	return checkMessageThreadID == GetCurrentThreadId()
+}
