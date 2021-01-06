@@ -3387,8 +3387,8 @@ func SendMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		log.Println(s, "->")
 		defer log.Println(s, "<-")
 
-		CheckMessageThread()
 	}
+	CheckMessageThread()
 	ret, _, _ := syscall.Syscall6(sendMessage.Addr(), 4,
 		uintptr(hWnd),
 		uintptr(msg),

@@ -1,6 +1,9 @@
 package win
 
-import "log"
+import (
+	"log"
+	"runtime"
+)
 
 var (
 	// UseAssert verbose debug mode
@@ -17,11 +20,11 @@ func Assert(test string, condition bool) {
 
 // CheckMessageThread windows message loop MUST always be processed by the SAME thread
 func CheckMessageThread() {
-	threadID := GetCurrentThreadId()
 	if checkMessageThreadID == 0 {
-		checkMessageThreadID = threadID
+		runtime.LockOSThread()
+		checkMessageThreadID = GetCurrentThreadId()
 	} else {
-		Assert("win.CheckMessageThread", threadID == checkMessageThreadID)
+		Assert("win.CheckMessageThread", checkMessageThreadID == GetCurrentThreadId())
 	}
 }
 
