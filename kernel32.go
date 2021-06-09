@@ -7,9 +7,10 @@
 package win
 
 import (
-	"golang.org/x/sys/windows"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 const MAX_PATH = 260
@@ -75,6 +76,7 @@ var (
 	getProfileString                   *windows.LazyProc
 	getThreadLocale                    *windows.LazyProc
 	getThreadUILanguage                *windows.LazyProc
+	getTickCount                       *windows.LazyProc
 	getVersion                         *windows.LazyProc
 	globalAlloc                        *windows.LazyProc
 	globalFree                         *windows.LazyProc
@@ -161,6 +163,7 @@ func init() {
 	getProfileString = libkernel32.NewProc("GetProfileStringW")
 	getThreadLocale = libkernel32.NewProc("GetThreadLocale")
 	getThreadUILanguage = libkernel32.NewProc("GetThreadUILanguage")
+	getTickCount = libkernel32.NewProc("GetTickCount")
 	getVersion = libkernel32.NewProc("GetVersion")
 	globalAlloc = libkernel32.NewProc("GlobalAlloc")
 	globalFree = libkernel32.NewProc("GlobalFree")
@@ -353,6 +356,14 @@ func GetVersion() uint32 {
 		0,
 		0)
 	return uint32(ret)
+}
+
+func GetTickCount() uint64 {
+	ret, _, _ := syscall.Syscall(getTickCount.Addr(), 0,
+		0,
+		0,
+		0)
+	return uint64(ret)
 }
 
 func GlobalAlloc(uFlags uint32, dwBytes uintptr) HGLOBAL {
